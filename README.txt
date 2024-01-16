@@ -13,4 +13,4 @@ Clone the repository using "git clone https://github.com/Prateek88786/MERN-chat-
 Change the directory using "cd MERN-chat-website-frontend" command.
 Run the "npm i" command to install the dependencies.
 Run "npm start" and the server will start in some time.
-Also run the backend server using the steps given in backend repository whose link is mentioned in the description.
+Also run the backend server using the steps given in backend repository whoose link is mentioned in the description.
