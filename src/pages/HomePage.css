@@ -2,7 +2,8 @@
 	margin: 0;
 	padding: 0;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	justify-content: flex-start;
 	align-items: center;
 	min-height: 100vh;
 	font-family: 'Jost', sans-serif;
@@ -16,6 +17,7 @@
 	background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
 	border-radius: 10px;
 	box-shadow: 5px 20px 50px #000;
+	margin-top: 20px;
 }
 #chk{
 	display: none;
@@ -89,8 +91,8 @@ input{
 	transform: scale(.6);
 }
 #site-name{
-	color:white;
-	margin-top: 40px;
-	margin-left: 40px;
+	color: white;
 	font-size: 50px;
+	margin: 40px 0 0 0;
+	text-align: center;
 }
