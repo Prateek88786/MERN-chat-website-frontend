@@ -46,7 +46,7 @@ const ChatComponent = (props) => {
         console.error(error);
       }
     };
-    fetchData()
+    fetchData();
 
     const intervalId = setInterval(() => {
       if (selectedUser) {
@@ -56,13 +56,32 @@ const ChatComponent = (props) => {
           .catch(error => console.error(error));
       }
     }, 2000);
-    window.addEventListener('beforeunload',()=>{axios.put(`https://mern-chat-website-backend.vercel.app/api/unselect/${props.email}`)})
+
+    return () => clearInterval(intervalId);
+  }, [props.email, selectedUser]);
+
+  // Handle unload and visibility events for all platforms
+  useEffect(() => {
+    const handleUnload = () => {
+      axios.put(`https://mern-chat-website-backend.vercel.app/api/unselect/${props.email}`);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        handleUnload();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleUnload);
+    window.addEventListener('pagehide', handleUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      clearInterval(intervalId);
-      window.removeEventListener('beforeunload',()=>{axios.put(`https://mern-chat-website-backend.vercel.app/api/unselect/${props.email}`)})  
-    }
-  }, [props.email, selectedUser]);
+      window.removeEventListener('beforeunload', handleUnload);
+      window.removeEventListener('pagehide', handleUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [props.email]);
 
   const handleUserClick = (user) => {
     axios.put(`https://mern-chat-website-backend.vercel.app/api/selectUser/${props.email}/${user.email}`);
@@ -78,10 +97,7 @@ const ChatComponent = (props) => {
   };
 
   const sendMessage = async () => {
-    if (newMessage.trim() === '') {
-      // Don't send empty messages
-      return;
-    }
+    if (newMessage.trim() === '') return;
 
     try {
       await axios.post('https://mern-chat-website-backend.vercel.app/api/send', {
@@ -94,7 +110,7 @@ const ChatComponent = (props) => {
 
       const response = await axios.get(`https://mern-chat-website-backend.vercel.app/api/messages/${selectedUser.email}/${props.email}`);
       setMessages(response.data);
-      setNewMessage("");
+      setNewMessage('');
 
       const userData = await axios.get(`https://mern-chat-website-backend.vercel.app/api/user/${selectedUser.email}`);
       if (userData.data[0].selectedUser !== props.email) {
@@ -136,20 +152,18 @@ const ChatComponent = (props) => {
                 />
                 <span>{user.name}</span>
                 <p>
-                  <strong>{unread === undefined ? '' : unread.map((c) => {
-                    if (c.email === user.email && c.count > 0) {
-                      return `${c.count}`;
-                    } else {
-                      return '';
-                    }
-                  })}</strong>
+                  <strong>
+                    {unread?.map((c) => (
+                      c.email === user.email && c.count > 0 ? c.count : ''
+                    ))}
+                  </strong>
                 </p>
               </motion.li>
             ))}
           </ul>
         </motion.div>
       )}
-      
+
       <div className="chat-messages">
         {selectedUser ? (
           <>
