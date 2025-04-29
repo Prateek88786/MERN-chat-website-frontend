@@ -23,7 +23,7 @@ const Homepage = (props) => {
   }
   const login=async(e)=>{
     e.preventDefault()
-    let data=await axios.get(`http://127.0.0.1:5000/api/login?email=${email}&password=${password}`)
+    let data=await axios.get(`https://mern-chat-website-backend.vercel.app/api/login?email=${email}&password=${password}`)
     data=data.data
     console.log(data)
     let name=data[0].name
@@ -37,7 +37,7 @@ const Homepage = (props) => {
   }
   const signup=async(e)=>{
     e.preventDefault()
-    await axios.post('http://127.0.0.1:5000/api/signup',{
+    await axios.post('https://mern-chat-website-backend.vercel.app/api/signup',{
       name:nameOfUser,
       email:email,
       password:password,

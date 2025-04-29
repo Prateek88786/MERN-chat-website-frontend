@@ -37,10 +37,10 @@ const ChatComponent = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:5000/api/user/${props.email}`);
+        const response = await axios.get(`https://mern-chat-website-backend.vercel.app/api/user/${props.email}`);
         setUnread(response.data[0].unread);
 
-        const usersResponse = await axios.get('http://localhost:5000/api/users');
+        const usersResponse = await axios.get('https://mern-chat-website-backend.vercel.app/api/users');
         setUsers(usersResponse.data.filter(d => d.email !== props.email));
       } catch (error) {
         console.error(error);
@@ -51,22 +51,22 @@ const ChatComponent = (props) => {
     const intervalId = setInterval(() => {
       if (selectedUser) {
         fetchData();
-        axios.get(`http://127.0.0.1:5000/api/messages/${selectedUser.email}/${props.email}`)
+        axios.get(`https://mern-chat-website-backend.vercel.app/api/messages/${selectedUser.email}/${props.email}`)
           .then(response => setMessages(response.data))
           .catch(error => console.error(error));
       }
     }, 2000);
-    window.addEventListener('beforeunload',()=>{axios.put(`http://127.0.0.1:5000/api/unselect/${props.email}`)})
+    window.addEventListener('beforeunload',()=>{axios.put(`https://mern-chat-website-backend.vercel.app/api/unselect/${props.email}`)})
 
     return () => {
       clearInterval(intervalId);
-      window.removeEventListener('beforeunload',()=>{axios.put(`http://127.0.0.1:5000/api/unselect/${props.email}`)})  
+      window.removeEventListener('beforeunload',()=>{axios.put(`https://mern-chat-website-backend.vercel.app/api/unselect/${props.email}`)})  
     }
   }, [props.email, selectedUser]);
 
   const handleUserClick = (user) => {
-    axios.put(`http://127.0.0.1:5000/api/selectUser/${props.email}/${user.email}`);
-    axios.get(`http://127.0.0.1:5000/api/messages/${user.email}/${props.email}`)
+    axios.put(`https://mern-chat-website-backend.vercel.app/api/selectUser/${props.email}/${user.email}`);
+    axios.get(`https://mern-chat-website-backend.vercel.app/api/messages/${user.email}/${props.email}`)
       .then(response => {
         setSelectedUser(user);
         setMessages(response.data);
@@ -84,7 +84,7 @@ const ChatComponent = (props) => {
     }
 
     try {
-      await axios.post('http://127.0.0.1:5000/api/send', {
+      await axios.post('https://mern-chat-website-backend.vercel.app/api/send', {
         senderUsername: props.email,
         receiverUsername: selectedUser.email,
         senderName: props.name,
@@ -92,13 +92,13 @@ const ChatComponent = (props) => {
         content: newMessage,
       });
 
-      const response = await axios.get(`http://127.0.0.1:5000/api/messages/${selectedUser.email}/${props.email}`);
+      const response = await axios.get(`https://mern-chat-website-backend.vercel.app/api/messages/${selectedUser.email}/${props.email}`);
       setMessages(response.data);
       setNewMessage("");
 
-      const userData = await axios.get(`http://127.0.0.1:5000/api/user/${selectedUser.email}`);
+      const userData = await axios.get(`https://mern-chat-website-backend.vercel.app/api/user/${selectedUser.email}`);
       if (userData.data[0].selectedUser !== props.email) {
-        axios.put(`http://127.0.0.1:5000/api/unread/${selectedUser.email}/${props.email}`);
+        axios.put(`https://mern-chat-website-backend.vercel.app/api/unread/${selectedUser.email}/${props.email}`);
       }
     } catch (error) {
       console.error(error);
